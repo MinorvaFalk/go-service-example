@@ -1,1 +1,1 @@
-# go-service-example
+# GO-Service-Example
