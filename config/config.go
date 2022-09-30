@@ -14,11 +14,9 @@ type config struct {
 	Port string `mapstructure:"port"`
 }
 
-var C config
-
 // Read config from named file (config.yaml)
 func InitConfig() *config {
-	Config := &C
+	var c config
 
 	viper.AddConfigPath(filepath.Join(rootDir(), "config"))
 
@@ -30,18 +28,18 @@ func InitConfig() *config {
 		panic(fmt.Errorf("config file not found\n%v", err))
 	}
 
-	if err := viper.Unmarshal(&Config); err != nil {
+	if err := viper.Unmarshal(&c); err != nil {
 		panic(fmt.Errorf("failed to read configuration\n%v", err))
 	}
 
-	fmt.Printf("config : %v\n", Config)
+	fmt.Printf("config : %v\n", c)
 
-	return Config
+	return &c
 }
 
 // Read config from .env (unnamed file)
-func ReadEnv() {
-	Config := &C
+func ReadEnv() *config {
+	var c config
 
 	viper.AddConfigPath(filepath.Join(rootDir(), "config"))
 
@@ -52,11 +50,13 @@ func ReadEnv() {
 		panic(fmt.Errorf("config file not found\n%v", err))
 	}
 
-	if err := viper.Unmarshal(&Config); err != nil {
+	if err := viper.Unmarshal(&c); err != nil {
 		panic(fmt.Errorf("failed to read configuration\n%v", err))
 	}
 
-	fmt.Printf("config : %v\n", Config)
+	fmt.Printf("config : %v\n", c)
+
+	return &c
 }
 
 // Fetch root directory path
