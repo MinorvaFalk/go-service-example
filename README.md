@@ -436,6 +436,50 @@ func main() {
 }
 ```
 
+### *Penerapan Optional*
+
+Untuk menerapkan `multiple service`, dapat digunakan cara sebagai berikut.
+```go
+type Services struct {
+	ServiceA *servicea.ServiceA
+	ServiceB *serviceb.ServiceB
+}
+
+type Service struct {
+	l  *logger.Logger
+	db *datasource.DB
+}
+
+func New(l *logger.Logger, db *datasource.DB) *Service {
+	return &Service{
+		l:  l,
+		db: db,
+	}
+}
+
+func (s *Service) NewServices() *Services {
+	return &Services{
+		ServiceA: servicea.NewServiceA(s.l, s.db),
+		ServiceB: serviceb.NewServiceB(),
+	}
+}
+```
+
+Cara yang digunakan adalah dengan membuat sebuah struct `Service` yang berfungsi untuk menyimpan global dependency dan struct `Services` yang menyimpan seluruh services yang ada. Kemudian untuk mengakses keseluruhan service, developer dapat menggunakkan cara berikut :
+
+```go
+func main() {
+	// ...
+	s := service.New(l, db)
+	ss := s.NewServices()
+
+	ss.ServiceA.DoSomething()
+
+	// ...
+}
+
+```
+
 ## Cron Job
 Setelah menerapkan kedua service (Service A dan Service B), developer diminta untuk membuat sebuah `cron job` yang menjalankan fungsi dalam kedua service tersebut. Untuk menerapkan cron job, kita akan menggunakkan sebuah library yaitu [robfig/cron](https://github.com/robfig/cron).
 
