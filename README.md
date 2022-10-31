@@ -17,7 +17,7 @@ psql -U <username> -f sql/user.sql
 // file main.go
 func main() {
     // using config.yaml
-	c := config.InitConfig()
+    c := config.InitConfig()
 
     // using .env
     c := config.ReadEnv()
