@@ -30,7 +30,7 @@ func (s *ServiceA) DoSomething() {
 
 func (s *ServiceA) CopyToCSV(ctx context.Context) {
 	conn := s.db.Conn
-	defer conn.Close(context.Background())
+	defer conn.Close(ctx)
 
 	query := `
 		COPY (SELECT * 
